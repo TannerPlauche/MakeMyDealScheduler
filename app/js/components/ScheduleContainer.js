@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import _ from "lodash"
-import {Dialog, DialogTitle, DialogContent, DialogActions} from "react-mdl";
 import RegistrationSlot from "./RegistrationSlot";
+import RegisterModal from './RegisterModal';
 import store from "../../stores/registrationStore";
 
 @observer
@@ -11,8 +11,17 @@ export default class ScheduleContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentRegistration: {}
+      currentRegistration: {
+        timeSlot: "",
+        firstName: "",
+        lastName: "",
+        phoneNumber: null
+      }
     };
+  }
+
+  updateSlot() {
+    store.updateRegistrationSlot(this.state.currentRegistration);
   }
 
   /**
@@ -20,17 +29,17 @@ export default class ScheduleContainer extends Component {
    * set default values for the inputs
    * @param {object} scheduleObj
    */
-  handleOpenDialog(scheduleObj) {
-    store.openDialog();
+  handleOpenDialog = (scheduleObj) => {
     _.assign(this.state.currentRegistration, scheduleObj);
     this.setState({
       currentRegistration: this.state.currentRegistration
     }, function () {
+      store.openDialog();
       document.getElementById("dialogFirstName").value = this.state.currentRegistration.firstName;
       document.getElementById("dialogLastName").value = this.state.currentRegistration.lastName;
       document.getElementById("dialogPhoneNumber").value = this.state.currentRegistration.phoneNumber;
     })
-  }
+  };
 
   /**
    * Cancel the dialog
@@ -89,70 +98,22 @@ export default class ScheduleContainer extends Component {
   }
 
   render() {
+    // Create array of RegistrationTimeSlot components
     let registrationSlots = store.registrationSlots.map((registrationSlot, index)=>(
       <RegistrationSlot key={index} id={index} onClick={this.handleOpenDialog.bind(this)} schedule={registrationSlot}/>
     ));
 
-    let {inputStyle} = styles;
-
     return (
-
       <div className="container text-center">
         Schedule your test drive
-
-        <Dialog open={store.dialogIsOpen}>
-          <DialogTitle>Register for a test drive</DialogTitle>
-          <form className="form-group form-inline">
-
-            <DialogContent>
-              <h3>{this.state.currentRegistration.timeSlot}</h3>
-              <label htmlFor="dialogFirstName">First name</label>
-              <input onKeyUp={this.handleUpdateRegistrationFirstName.bind(this)}
-                     style={inputStyle} className="form-control"
-                     type="text"
-                     placeholder="First name"
-                     id="dialogFirstName"
-                     required/>
-              <label htmlFor="dialogLastName">Last name</label>
-              <input onKeyUp={this.handleUpdateRegistrationLastName.bind(this)}
-                     style={inputStyle}
-                     className="form-control"
-                     type="text"
-                     placeholder="last name" id="dialogLastName"
-                     required/>
-              <label htmlFor="dialogPhoneNumber">Phone</label>
-              <input onKeyUp={this.handleUpdateRegistrationPhoneNumber.bind(this)}
-                     style={inputStyle}
-                     className="form-control"
-                     minLength="10"
-                     min="0" type="number"
-                     placeholder="Phone number"
-                     id="dialogPhoneNumber"
-                     required/>
-
-            </DialogContent>
-            <DialogActions>
-              <button type='submit'
-                      style={inputStyle}
-                      className="btn btn-lg btn-success"
-                      onClick={this.handleupdateRegistrationSlot.bind(this)}>
-                Register for this time!
-              </button>
-              <button type='button'
-                      style={inputStyle}
-                      className="btn btn-lg btn-warning"
-                      onClick={this.handleCloseDialog}>
-                Cancel
-              </button>
-              { this.state.currentRegistration.firstName && this.state.currentRegistration.lastName && this.state.currentRegistration.phoneNumber &&
-              <button type='button'
-                      className="btn btn-lg btn-danger"
-                      onClick={this.handleClearCurrentRegistration.bind(this)}>
-                Clear this appointment
-              </button>}
-            </DialogActions>
-          </form>
-        </Dialog>
+        <RegisterModal open={store.dialogIsOpen}
+                       currentRegistration={this.state.currentRegistration}
+                       handleUpdateRegistrationFirstName={this.handleUpdateRegistrationFirstName.bind(this)}
+                       handleUpdateRegistrationLastName={this.handleUpdateRegistrationLastName.bind(this)}
+                       handleUpdateRegistrationPhoneNumber={this.handleUpdateRegistrationPhoneNumber.bind(this)}
+                       updateSlot={this.updateSlot.bind(this)}
+                       handleCloseDialog={this.handleCloseDialog.bind(this)}
+                       handleClearCurrentRegistration={this.handleClearCurrentRegistration.bind(this)}/>
         <div className="row">
           {registrationSlots}
         </div>
@@ -162,10 +123,4 @@ export default class ScheduleContainer extends Component {
 
 };
 
-const styles = {
-  inputStyle: {
-    marginRight: 15,
-
-  }
-};
 

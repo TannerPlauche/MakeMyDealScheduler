@@ -1,8 +1,6 @@
 import {observable, action} from "mobx";
 import RegistrationSlot from "./registrationSlotClass";
 import _ from "lodash";
-const timeSlots = ["9:00 AM", "10:00 AM", "11:00 AM", "12:00 AM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"];
-
 
 class Store {
   constructor() {
@@ -11,7 +9,6 @@ class Store {
 
   @observable registrationSlots = this.timeSlots.map(timeSlot => new RegistrationSlot(timeSlot));
   @observable dialogIsOpen = false;
-  // @observable currentRegistration = {};
 
   @action openDialog(){
     this.dialogIsOpen = true;
@@ -22,7 +19,6 @@ class Store {
   }
 
   @action updateRegistrationSlot(updatedObj) {
-
     Object.assign(_.find(this.registrationSlots, {'id': updatedObj.id}), updatedObj);
     this.closeDialog();
   }
