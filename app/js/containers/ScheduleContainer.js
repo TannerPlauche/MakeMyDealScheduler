@@ -28,10 +28,6 @@ export default class ScheduleContainer extends Component {
     };
   }
 
-  updateSlot() {
-    store.updateRegistrationSlot(this.state.currentRegistration);
-  }
-
   /**
    * Open the registration model
    * set default values for the inputs
@@ -60,7 +56,8 @@ export default class ScheduleContainer extends Component {
    * Update the registration object currently being edited
    * @param {event} e
    */
-  handleupdateRegistrationSlot() {
+  handleupdateRegistrationSlot(e) {
+    e.preventDefault();
     let currentRegistration = this.state.currentRegistration;
     if(currentRegistration.firstName && currentRegistration.lastName && currentRegistration.phoneNumber)
       store.updateRegistrationSlot(this.state.currentRegistration);
@@ -120,7 +117,7 @@ export default class ScheduleContainer extends Component {
                        handleUpdateRegistrationFirstName={this.handleUpdateRegistrationFirstName.bind(this)}
                        handleUpdateRegistrationLastName={this.handleUpdateRegistrationLastName.bind(this)}
                        handleUpdateRegistrationPhoneNumber={this.handleUpdateRegistrationPhoneNumber.bind(this)}
-                       updateSlot={this.updateSlot.bind(this)}
+                       updateSlot={this.handleupdateRegistrationSlot.bind(this)}
                        handleCloseDialog={this.handleCloseDialog}
                        handleClearCurrentRegistration={this.handleClearCurrentRegistration.bind(this)}/>
         <div className="row">

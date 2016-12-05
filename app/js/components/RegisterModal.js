@@ -28,22 +28,24 @@ export default class RegistrationModal extends Component {
     if(currentIndex !== -1) savedRecord = store.registrationSlots[ currentIndex ];
     return (
       <Dialog open={props.open}>
-        <DialogTitle>Register for a test drive</DialogTitle>
-        <DialogContent>
-          <h3>{props.currentRegistration.timeSlot}</h3>
-          <form className="form-group form-inline">
+        <form className="form-group form-inline">
+          <DialogTitle>Register for a test drive</DialogTitle>
+          <DialogContent>
+            <h3>{props.currentRegistration.timeSlot}</h3>
             <label style={labelStyle} htmlFor="dialogFirstName">First name</label>
             <input onKeyUp={props.handleUpdateRegistrationFirstName.bind(this)}
                    style={inputStyle} className="form-control"
                    type="text"
                    placeholder="First name"
-                   id="dialogFirstName"/>
+                   id="dialogFirstName"
+                   required=""/>
             <label style={labelStyle} htmlFor="dialogLastName">Last name</label>
             <input onKeyUp={props.handleUpdateRegistrationLastName.bind(this)}
                    style={inputStyle}
                    className="form-control"
                    type="text"
-                   placeholder="last name" id="dialogLastName"/>
+                   placeholder="last name" id="dialogLastName"
+                   required=""/>
             <label style={labelStyle} htmlFor="dialogPhoneNumber">Phone</label>
             <input onKeyUp={props.handleUpdateRegistrationPhoneNumber.bind(this)}
                    style={inputStyle}
@@ -51,33 +53,34 @@ export default class RegistrationModal extends Component {
                    minLength="10"
                    min="0" type="number"
                    placeholder="Phone number"
-                   id="dialogPhoneNumber"/>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <button type='button'
-                  style={inputStyle}
-                  className="btn btn-lg btn-success"
-                  onClick={props.updateSlot.bind(this)}>
-            Register for this time!
-          </button>
-          <button type='button'
-                  style={inputStyle}
-                  className="btn btn-lg btn-warning"
-                  onClick={props.handleCloseDialog}>
-            Cancel
-          </button>
-          {/*Only display Clear Appointment button if there is a registration saved */}
-          {savedRecord.firstName &&
-          savedRecord.lastName &&
-          savedRecord.phoneNumber &&
-          <button type='button'
-                  className="btn btn-lg btn-danger"
-                  onClick={props.handleClearCurrentRegistration.bind(this)}>
-            Clear this appointment
-          </button>
-          }
-        </DialogActions>
+                   id="dialogPhoneNumber"
+                   required=""/>
+          </DialogContent>
+          <DialogActions>
+            <button type='submit'
+                    style={inputStyle}
+                    className="btn btn-lg btn-success"
+                    onClick={props.updateSlot.bind(this)}>
+              Register for this time!
+            </button>
+            <button type='button'
+                    style={inputStyle}
+                    className="btn btn-lg btn-warning"
+                    onClick={props.handleCloseDialog}>
+              Cancel
+            </button>
+            {/*Only display Clear Appointment button if there is a registration saved */}
+            {savedRecord.firstName &&
+            savedRecord.lastName &&
+            savedRecord.phoneNumber &&
+            <button type='button'
+                    className="btn btn-lg btn-danger"
+                    onClick={props.handleClearCurrentRegistration.bind(this)}>
+              Clear this appointment
+            </button>
+            }
+          </DialogActions>
+        </form>
       </Dialog>
     )
   }
@@ -92,5 +95,3 @@ const styles = {
     marginRight: 5
   }
 };
-
-// export default {RegistrationModal};

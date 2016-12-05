@@ -41,5 +41,3 @@ const styles = {
   },
   inputStyle: {}
 };
-
-// export default {RegistrationSlot};
