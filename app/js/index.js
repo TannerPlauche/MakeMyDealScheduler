@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import reactDOM from 'react-dom';
-import ScheduleContainer from './components/ScheduleContainer';
+import ScheduleContainer from './containers/ScheduleContainer';
 import store from "../stores/registrationStore";
 
 

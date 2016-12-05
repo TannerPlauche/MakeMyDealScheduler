@@ -1,10 +1,18 @@
-import React, {Component} from "react";
-import {observer} from "mobx-react";
+import React, { Component } from "react";
+import { observer } from "mobx-react";
 import _ from "lodash"
-import RegistrationSlot from "./RegistrationSlot";
-import RegisterModal from './RegisterModal';
+import RegistrationSlot from "../components/RegistrationSlot";
+import RegisterModal from '../components/RegisterModal';
 import store from "../../stores/registrationStore";
 
+/**
+ * Component && page/container for registering for a time slot
+ * DISPLAYS:
+ * available time slots, registration modal
+ * DATA:
+ * registrationSlots = array of RegistrationSlot components.
+ * currentRegistration = registrationSlot class instance currently being edited
+ */
 @observer
 export default class ScheduleContainer extends Component {
 
@@ -44,17 +52,18 @@ export default class ScheduleContainer extends Component {
   /**
    * Cancel the dialog
    */
-  handleCloseDialog() {
+  handleCloseDialog = ()=> {
     store.closeDialog();
-  }
+  };
 
   /**
    * Update the registration object currently being edited
    * @param {event} e
    */
-  handleupdateRegistrationSlot(e) {
-    e.preventDefault();
-    store.updateRegistrationSlot(this.state.currentRegistration);
+  handleupdateRegistrationSlot() {
+    let currentRegistration = this.state.currentRegistration;
+    if(currentRegistration.firstName && currentRegistration.lastName && currentRegistration.phoneNumber)
+      store.updateRegistrationSlot(this.state.currentRegistration);
   }
 
   /**
@@ -94,13 +103,13 @@ export default class ScheduleContainer extends Component {
    * Clear the current registration slot
    */
   handleClearCurrentRegistration() {
-    store.clearRegistrationSlot(this.state.currentRegistration);
+    store.clearRegistrationSlot(this.state.currentRegistration.id);
   }
 
   render() {
     // Create array of RegistrationTimeSlot components
     let registrationSlots = store.registrationSlots.map((registrationSlot, index)=>(
-      <RegistrationSlot key={index} id={index} onClick={this.handleOpenDialog.bind(this)} schedule={registrationSlot}/>
+      <RegistrationSlot key={index} id={index} onClick={this.handleOpenDialog} schedule={registrationSlot}/>
     ));
 
     return (
@@ -112,7 +121,7 @@ export default class ScheduleContainer extends Component {
                        handleUpdateRegistrationLastName={this.handleUpdateRegistrationLastName.bind(this)}
                        handleUpdateRegistrationPhoneNumber={this.handleUpdateRegistrationPhoneNumber.bind(this)}
                        updateSlot={this.updateSlot.bind(this)}
-                       handleCloseDialog={this.handleCloseDialog.bind(this)}
+                       handleCloseDialog={this.handleCloseDialog}
                        handleClearCurrentRegistration={this.handleClearCurrentRegistration.bind(this)}/>
         <div className="row">
           {registrationSlots}

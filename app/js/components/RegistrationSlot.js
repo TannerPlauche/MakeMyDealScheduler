@@ -1,21 +1,25 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
+/**
+ * Component for individual time slots
+ * Displays time for slot, availability status, registered customer's name
+ */
 export default class RegistrationSlot extends Component {
 
   /**
    * Open registration modal and pass in registration object to be updated
    */
-  handleOnClick() {
+  handleOnClick = ()=> {
     this.props.onClick(this.props.schedule);
-  }
+  };
 
   render() {
     let schedule = this.props.schedule;
-    let {slotStyle} = styles;
+    let { slotStyle } = styles;
     slotStyle.borderColor = schedule.firstName ? "red" : "green";
 
     return (
-      <div onClick={this.handleOnClick.bind(this)}
+      <div onClick={this.handleOnClick}
            className="col-xs-4
                       col-xs-offset-4
                       text-left"
@@ -24,7 +28,7 @@ export default class RegistrationSlot extends Component {
       </div>
     )
   }
-};
+}
 
 const styles = {
   slotStyle: {
@@ -38,3 +42,4 @@ const styles = {
   inputStyle: {}
 };
 
+// export default {RegistrationSlot};
